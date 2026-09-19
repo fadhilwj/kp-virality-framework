@@ -33,7 +33,7 @@ run_input = {
     "include:nativeretweets": False,
     "lang": "in",
     "maxItems": 200,
-    "queryType": "Latest",
+    "queryType": "Top",
     "searchTerms": [
         "(\"kebakaran hutan\" OR karhutla OR \"kabut asap\") kalimantan"
     ],

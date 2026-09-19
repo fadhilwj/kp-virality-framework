@@ -6,7 +6,7 @@ from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
 # 1. Siapkan folder penyimpanan (Otomatis dibuat jika belum ada)
-folder_path = "data/dataset_media/karhutla"
+folder_path = "data/dataset_media/08_ui_bevan_porsche"
 os.makedirs(folder_path, exist_ok=True)
 
 # 2. Setup Session dengan fitur 'Retry with Backoff' sesuai syarat KP
@@ -23,7 +23,7 @@ session.mount("https://", adapter)
 session.mount("http://", adapter)
 
 # 3. Baca file CSV
-csv_file = "data/dataset_1_karhutla_merged.csv" 
+csv_file = "data/dataset_07_gpt6_merged.csv" 
 df = pd.read_csv(csv_file)
 
 print(f"Mulai memindai {len(df)} cuitan untuk mencari media dengan mode Retry-Backoff...")

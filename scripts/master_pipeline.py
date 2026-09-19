@@ -9,23 +9,100 @@ from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
 # ==========================================
-# 1. KONFIGURASI KASUS (ISI BAGIAN INI)
+# 1. KONFIGURASI 13 KASUS FINAL
 # ==========================================
-# Tambahkan 14 kasus sisamu ke dalam list ini
 CASES_CONFIG = [
+    {
+        "case_name": "01_indonesia_gelap",
+        "search_terms": '(#indonesiagelap OR #indonesiagelap2025 OR #indonesiaterang OR "peringatan darurat")',
+        "lang": "in",
+        "since_time": "1738540800",  # 3 Februari 2025
+        "until_time": "1740960000"   # 3 Maret 2025
+    },
+    {
+        "case_name": "02_kabur_aja_dulu",
+        "search_terms": '(#kaburajadulu OR "kabur aja dulu")',
+        "lang": "in",
+        "since_time": "1738195200",  # 30 Januari 2025
+        "until_time": "1740614400"   # 27 Februari 2025
+    },
+    {
+        "case_name": "03_brave_pink_hero_green",
+        "search_terms": '("brave pink" OR "hero green" OR "profil pink hijau" OR "17+8 tuntutan")',
+        "lang": "in",
+        "since_time": "1755561600",  # 19 Agustus 2025
+        "until_time": "1757980800"   # 16 September 2025
+    },
+    {
+        "case_name": "04_utas_layanan_kesehatan",
+        "search_terms": 'yurizal (bpjs OR nakes OR antre OR "rumah sakit")',
+        "lang": "in",
+        "since_time": "1784592000",  # 21 Juli 2026
+        "until_time": "1787011200"   # 18 Agustus 2026
+    },
+    {
+        "case_name": "05_isu_demo_agustus",
+        "search_terms": '("demo agustus 2026" OR "demo dpr" OR "ruu perampasan aset" OR "perampasan aset" OR ampb OR senayan)',
+        "lang": "in",
+        "since_time": "1786579200",  # 13 Agustus 2026
+        "until_time": "1788998400"   # 10 September 2026
+    },
+    {
+        "case_name": "06_mbg",
+        "search_terms": '(mbg OR "makan bergizi gratis" OR "keracunan mbg")',
+        "lang": "in",
+        "since_time": "1787270400",  # 21 Agustus 2026
+        "until_time": "1789689600"   # 18 September 2026
+    },
     # {
-    #     "case_name": "karhutla",
-    #     "search_terms": '("kebakaran hutan" OR karhutla OR "kabut asap") kalimantan',
-    #     "since_time": "1785888000",
-    #     "until_time": "1788393600"
+    #     "case_name": "07_gpt6",
+    #     "search_terms": '(gpt6 OR "gpt 6" OR "chatgpt 6" OR "openai gpt6")',
+    #     "lang": "en",  # Bahasa Inggris
+    #     "since_time": "1787184000",  # 20 Agustus 2026
+    #     "until_time": "1789603200"   # 17 September 2026
     # },
     {
-        "case_name": "15_purbaya",
-        "search_terms": '("purbaya" OR "kemenkeu" OR "pajak") reshuffle', # CONTOH: Ganti dengan keyword aslimu
-        "since_time": "1785888000", # CONTOH: Ganti Unix aslimu
-        "until_time": "1788393600"  # CONTOH: Ganti Unix aslimu
+        "case_name": "08_ui_bevan_porsche",
+        "search_terms": '"mahasiswa ui" AND (bevan OR porsche OR "bawa porsche")',
+        "lang": "in",
+        "since_time": "1787529600",  # 24 Agustus 2026
+        "until_time": "1789948800"   # 21 September 2026
     },
-    # Tambahkan kasus 2 sampai 14 di bawah sini...
+    {
+        "case_name": "10_gempa_ntt",
+        "search_terms": 'gempa (ntt OR "nusa tenggara timur" OR kupang OR flores)',
+        "lang": "in",
+        "since_time": "1785542400",  # 1 Agustus 2026
+        "until_time": "1787961600"   # 29 Agustus 2026
+    },
+    {
+        "case_name": "11_anak_krakatau",
+        "search_terms": '(krakatau OR "anak krakatau" OR erupsi OR "gunung meletus")',
+        "lang": "in",
+        "since_time": "1787356800",  # 22 Agustus 2026
+        "until_time": "1789776000"   # 19 September 2026
+    },
+    {
+        "case_name": "12_reshuffle_purbaya",
+        "search_terms": '("reshuffle kemenkeu" OR "reshuffle kementerian keuangan" OR purbaya OR "reshuffle purbaya" OR "purbaya dicabut" OR "purbaya dipecat" OR "purbaya dicopot")',
+        "lang": "in",
+        "since_time": "1788134400",  # 31 Agustus 2026
+        "until_time": "1790553600"   # 28 September 2026
+    },
+    {
+        "case_name": "13_iphone_series",
+        "search_terms": '("iphone 18" OR "iphone 18 pro" OR "iphone duo" OR "apple event")',
+        "lang": "en",  # Bahasa Inggris
+        "since_time": "1787702400",  # 26 Agustus 2026
+        "until_time": "1790121600"   # 23 September 2026
+    },
+    {
+        "case_name": "14_maudy_ayunda",
+        "search_terms": '("maudy ayunda" OR maudy) (mindfulness OR nirempati OR empati OR "tone deaf")',
+        "lang": "in",
+        "since_time": "1788134400",  # 31 Agustus 2026
+        "until_time": "1790553600"   # 28 September 2026
+    }
 ]
 
 # ==========================================
@@ -53,8 +130,8 @@ os.makedirs("data", exist_ok=True)
 # 3. FUNGSI-FUNGSI PIPELINE
 # ==========================================
 
-def run_scraper(case_name, query_type, search_terms, since, until):
-    print(f"\n[{case_name}] Memulai Scraping '{query_type}'...")
+def run_scraper(case_name, query_type, search_terms, since, until, lang_code):
+    print(f"\n[{case_name}] Memulai Scraping '{query_type}' (Bahasa: {lang_code})...")
     run_input = {
         "filter:blue_verified": False, "filter:consumer_video": False,
         "filter:has_engagement": False, "filter:hashtags": False,
@@ -66,7 +143,7 @@ def run_scraper(case_name, query_type, search_terms, since, until):
         "filter:safe": False, "filter:spaces": False,
         "filter:twimg": False, "filter:videos": False,
         "filter:vine": False, "include:nativeretweets": False,
-        "lang": "in",
+        "lang": lang_code, # Parameter dinamis bahasa diinjeksi di sini
         "maxItems": 200,
         "queryType": query_type,
         "searchTerms": [search_terms],
@@ -157,9 +234,15 @@ if __name__ == "__main__":
         try:
             print(f"\n{'='*50}\nMEMPROSES KASUS: {case.upper()}\n{'='*50}")
             
-            # 1. Scrape Top & Latest
-            file_top = run_scraper(case, "Top", config["search_terms"], config["since_time"], config["until_time"])
-            file_latest = run_scraper(case, "Latest", config["search_terms"], config["since_time"], config["until_time"])
+            # 1. Scrape Top & Latest (Mengirimkan variabel bahasa dari config)
+            file_top = run_scraper(
+                case, "Top", config["search_terms"], 
+                config["since_time"], config["until_time"], config["lang"]
+            )
+            file_latest = run_scraper(
+                case, "Latest", config["search_terms"], 
+                config["since_time"], config["until_time"], config["lang"]
+            )
             
             # 2. Merge Dataset
             final_csv, df_final = run_merger(case, file_top, file_latest)
@@ -169,8 +252,8 @@ if __name__ == "__main__":
             
             print(f"✅ KASUS {case.upper()} SELESAI 100%!")
             
-            # Jeda 5 detik sebelum lanjut ke kasus berikutnya agar tidak kena limit API
-            time.sleep(5) 
+            # Jeda 10 detik sebelum lanjut agar sistem Apify/Twitter tidak melimitasi request
+            time.sleep(10) 
             
         except Exception as e:
             print(f"❌ ERROR FATAL PADA KASUS {case}: {e}")
